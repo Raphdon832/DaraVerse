@@ -26,6 +26,11 @@
       "package": "com.anonymous.DaraverseNative"
     },
     "web": {
+      "name": "Daraverse",
+      "shortName": "Daraverse",
+      "themeColor": "#E6F4FE",
+      "backgroundColor": "#ffffff",
+      "display": "standalone",
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
