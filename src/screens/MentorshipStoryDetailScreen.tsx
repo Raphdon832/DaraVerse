@@ -8,6 +8,7 @@ import {
   heritageLabel,
 } from "../data/mentorshipStories";
 import { useMentorshipStoryCatalog } from "../hooks/useMentorshipStoryCatalog";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, spacing, typography } from "../theme/tokens";
 import type { MentorshipStackParamList } from "../types/navigation";
@@ -41,11 +42,18 @@ export default function MentorshipStoryDetailScreen({ navigation, route }: Props
   const rootNavigation = useRootNavigation();
   const { storyById } = useMentorshipStoryCatalog({ includeHidden: true });
   const story = storyById[route.params.storyId];
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   if (!story) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Story Detail"
             subtitle="Story not found"
@@ -65,7 +73,7 @@ export default function MentorshipStoryDetailScreen({ navigation, route }: Props
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]} showsVerticalScrollIndicator={false}>
         <AppHeader
           title={story.name}
           subtitle={`${story.origin} • ${story.domains.join(" + ")}`}

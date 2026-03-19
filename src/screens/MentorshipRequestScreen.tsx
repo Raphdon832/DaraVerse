@@ -16,6 +16,7 @@ import AnimatedButton from "../components/AnimatedButton";
 import AppHeader from "../components/AppHeader";
 import Pressable from "../components/SoundPressable";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { MentorshipStackParamList } from "../types/navigation";
 
@@ -30,6 +31,13 @@ export default function MentorshipRequestScreen({ navigation, route }: Props) {
   const mentor = state.catalogs.mentors.find((item) => item.id === route.params.mentorId);
   const currentRequest = state.mentorshipRequests[route.params.mentorId];
   const requestStatus = currentRequest?.status ?? "none";
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   const [goals, setGoals] = useState(currentRequest?.goals ?? "");
   const [note, setNote] = useState(currentRequest?.note ?? "");
@@ -37,7 +45,7 @@ export default function MentorshipRequestScreen({ navigation, route }: Props) {
   if (!mentor) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Mentor Not Found"
             subtitle="Unable to submit request"
@@ -72,7 +80,7 @@ export default function MentorshipRequestScreen({ navigation, route }: Props) {
         keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
       >
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, responsiveContainerStyle]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}

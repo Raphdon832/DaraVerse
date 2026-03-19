@@ -12,6 +12,7 @@ import BackButton from "../components/BackButton";
 import { trackSound, untrackAndUnloadSound } from "../audio/audioManager";
 import { useAppState } from "../context/AppStateContext";
 import { isCyberQuestMissionId } from "../data/cyberquestMission";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { MissionsStackParamList } from "../types/navigation";
 
@@ -75,6 +76,7 @@ const STORY_SUMMARIES: Record<string, StorySummary> = {
 export default function MissionPlayerScreen({ navigation, route }: Props) {
   const { missionId } = route.params;
   const { state } = useAppState();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
   const { missions: missionCatalog } = state.catalogs;
   const mission = missionCatalog.find(m => m.id === missionId);
   const story = STORY_SUMMARIES[missionId];
@@ -91,6 +93,12 @@ export default function MissionPlayerScreen({ navigation, route }: Props) {
   const [pageIndex, setPageIndex] = useState(0);
   const [isNarrationMuted, setIsNarrationMuted] = useState(false);
   const narrationSoundRef = useRef<Audio.Sound | null>(null);
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
   const totalPages = paragraphs.length;
   const progress = (pageIndex + 1) / totalPages;
   const isFirst = pageIndex === 0;
@@ -186,7 +194,7 @@ export default function MissionPlayerScreen({ navigation, route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <View style={styles.topNavRow}>
+      <View style={[styles.topNavRow, responsiveContainerStyle]}>
         <BackButton
           accessibilityLabel="Go to previous screen"
           onPress={exitStorySummary}
@@ -198,7 +206,7 @@ export default function MissionPlayerScreen({ navigation, route }: Props) {
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]} showsVerticalScrollIndicator={false}>
         {/* Main Image Banner */}
         <MotiView
           from={{ opacity: 0, scale: 0.9 }}

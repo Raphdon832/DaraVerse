@@ -10,6 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../components/BackButton";
 import { useAppState } from "../context/AppStateContext";
 import { defaultAgeBracket, getAgeBracketLabel } from "../data/ageBrackets";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { STEMStackParamList } from "../types/navigation";
@@ -31,6 +32,7 @@ function shuffle<T>(array: T[]): T[] {
 export default function STEMTriviaPlayerScreen({ navigation, route }: Props) {
   const { categoryId } = route.params;
   const { state, completeStemTriviaSession, markStemTriviaActivity } = useAppState();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
   const { stemCategories: stemCategoryCatalog, stemTriviaQuestions: allTriviaQuestions } = state.catalogs;
   const category = stemCategoryCatalog.find((c) => c.id === categoryId);
   const rootNavigation = useRootNavigation();
@@ -54,6 +56,12 @@ export default function STEMTriviaPlayerScreen({ navigation, route }: Props) {
   const [sessionScore, setSessionScore] = useState(0);
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationKey, setCelebrationKey] = useState(0);
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   useEffect(() => {
     markStemTriviaActivity(categoryId);
@@ -160,7 +168,7 @@ export default function STEMTriviaPlayerScreen({ navigation, route }: Props) {
 
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
         {/* Top bar */}
-        <View style={styles.topBar}>
+        <View style={[styles.topBar, responsiveContainerStyle]}>
           <BackButton
             accessibilityLabel="Go back"
             onPress={() => navigation.goBack()}
@@ -180,7 +188,7 @@ export default function STEMTriviaPlayerScreen({ navigation, route }: Props) {
           from={{ opacity: 0, translateY: -10 }}
           animate={{ opacity: 1, translateY: 0 }}
           transition={{ type: "timing", duration: 400 }}
-          style={styles.progressSection}
+          style={[styles.progressSection, responsiveContainerStyle]}
         >
           <View style={styles.progressTrack}>
             <MotiView
@@ -195,7 +203,7 @@ export default function STEMTriviaPlayerScreen({ navigation, route }: Props) {
         </MotiView>
 
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, responsiveContainerStyle]}
           showsVerticalScrollIndicator={false}
         >
           {/* Hero question card */}

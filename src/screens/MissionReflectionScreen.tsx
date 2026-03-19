@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { MissionsStackParamList } from "../types/navigation";
@@ -28,6 +29,13 @@ export default function MissionReflectionScreen({ navigation, route }: Props) {
   const { missions: missionCatalog } = state.catalogs;
   const mission = missionCatalog.find((m) => m.id === missionId);
   const rootNavigation = useRootNavigation();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
   const existingReflection = state.missionProgress[missionId]?.latestReflection ?? "";
   const [reflection, setReflection] = useState(existingReflection);
 
@@ -62,7 +70,7 @@ export default function MissionReflectionScreen({ navigation, route }: Props) {
         keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
       >
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, responsiveContainerStyle]}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
       >

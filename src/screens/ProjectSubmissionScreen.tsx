@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { ProjectsStackParamList } from "../types/navigation";
@@ -29,11 +30,18 @@ export default function ProjectSubmissionScreen({ navigation, route }: Props) {
   const project = projectCatalog.find((item) => item.id === projectId);
   const rootNavigation = useRootNavigation();
   const [submissionNotes, setSubmissionNotes] = useState("");
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   if (!project) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Project Submission"
             subtitle="Project not found"
@@ -52,18 +60,19 @@ export default function ProjectSubmissionScreen({ navigation, route }: Props) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
       >
-      <ScrollView
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
-      >
+      <View style={responsiveContainerStyle}>
         <AppHeader
           title="Project Submission"
           subtitle={project.title}
           showHomeAction
           onPressHome={() => rootNavigation.goBack()}
         />
-
+      </View>
+      <ScrollView
+        contentContainerStyle={[styles.content, responsiveContainerStyle]}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
+      >
         <MotiView
           from={{ opacity: 0, translateY: 20 }}
           animate={{ opacity: 1, translateY: 0 }}

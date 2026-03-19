@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { ProjectsStackParamList } from "../types/navigation";
@@ -21,11 +22,18 @@ export default function ProjectDetailScreen({ navigation, route }: Props) {
   const rootNavigation = useRootNavigation();
   const project = projectCatalog.find((item) => item.id === projectId);
   const projectProgress = state.projectProgress[projectId];
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   if (!project) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Project Detail"
             subtitle="Project not found"
@@ -39,13 +47,15 @@ export default function ProjectDetailScreen({ navigation, route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <View style={responsiveContainerStyle}>
         <AppHeader
           title="Project Detail"
           subtitle={project.title}
           showHomeAction
           onPressHome={() => rootNavigation.goBack()}
         />
+      </View>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]}>
 
         <MotiView
           from={{ opacity: 0, translateY: 20 }}
@@ -167,4 +177,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-

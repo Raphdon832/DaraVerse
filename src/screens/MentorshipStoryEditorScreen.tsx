@@ -21,6 +21,7 @@ import {
   type StoryHeritageFocus,
 } from "../data/mentorshipStories";
 import { useMentorshipStoryCatalog } from "../hooks/useMentorshipStoryCatalog";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import {
   upsertMentorshipStoryAsAdmin,
   type UpsertMentorshipStoryInput,
@@ -56,6 +57,7 @@ export default function MentorshipStoryEditorScreen({ navigation, route }: Props
   const { storyById } = useMentorshipStoryCatalog({ includeHidden: true });
   const editingStoryId = route.params?.storyId;
   const editingStory = editingStoryId ? storyById[editingStoryId] : undefined;
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
 
   const [userRole, setUserRole] = useState<UserRole>("learner");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,6 +80,12 @@ export default function MentorshipStoryEditorScreen({ navigation, route }: Props
 
   const isAdmin = userRole === "admin";
   const isEditing = Boolean(editingStoryId);
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   useEffect(() => {
     if (!user) {
@@ -203,7 +211,7 @@ export default function MentorshipStoryEditorScreen({ navigation, route }: Props
         keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
       >
         <ScrollView
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[styles.content, responsiveContainerStyle]}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
           showsVerticalScrollIndicator={false}

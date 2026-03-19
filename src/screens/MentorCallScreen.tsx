@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AppHeader from "../components/AppHeader";
 import Pressable from "../components/SoundPressable";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { MentorshipStackParamList } from "../types/navigation";
 
@@ -13,6 +14,7 @@ type Props = NativeStackScreenProps<MentorshipStackParamList, "MentorCall">;
 
 export default function MentorCallScreen({ navigation, route }: Props) {
   const { state, scheduleMentorCall } = useAppState();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const mentor = state.catalogs.mentors.find((item) => item.id === route.params.mentorId);
   const requestStatus = state.mentorshipRequests[route.params.mentorId]?.status ?? "none";
@@ -20,11 +22,17 @@ export default function MentorCallScreen({ navigation, route }: Props) {
     () => state.mentorshipCalls[route.params.mentorId] ?? [],
     [route.params.mentorId, state.mentorshipCalls],
   );
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   if (!mentor) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Call Unavailable"
             subtitle="Mentor not found"
@@ -41,7 +49,7 @@ export default function MentorCallScreen({ navigation, route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]} showsVerticalScrollIndicator={false}>
         <AppHeader
           title={`${mentor.name} Call`}
           subtitle="Schedule an in-app call"

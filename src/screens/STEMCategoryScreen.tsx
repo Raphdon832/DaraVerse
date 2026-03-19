@@ -10,6 +10,7 @@ import AppHeader from "../components/AppHeader";
 import BackButton from "../components/BackButton";
 import { useAppState } from "../context/AppStateContext";
 import { defaultAgeBracket, getAgeBracketLabel } from "../data/ageBrackets";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { STEMStackParamList } from "../types/navigation";
@@ -28,20 +29,29 @@ export default function STEMCategoryScreen({ navigation, route }: Props) {
     (q) => q.categoryId === categoryId && q.ageBracket === ageBracket
   ).length;
   const ageLabel = getAgeBracketLabel(ageBracket);
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   return (
     <SafeAreaView edges={["top", "bottom"]} style={styles.safeArea}>
       {/* Header */}
-      <AppHeader
-        title={category?.title ?? "Category"}
-        subtitle="Trivia Adventure"
-        showHomeAction
-        onPressHome={() => rootNavigation.goBack()}
-      />
+      <View style={responsiveContainerStyle}>
+        <AppHeader
+          title={category?.title ?? "Category"}
+          subtitle="Trivia Adventure"
+          showHomeAction
+          onPressHome={() => rootNavigation.goBack()}
+        />
+      </View>
 
       {/* Scrollable content */}
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, responsiveContainerStyle]}
         showsVerticalScrollIndicator={false}
       >
         <MotiView
@@ -103,7 +113,7 @@ export default function STEMCategoryScreen({ navigation, route }: Props) {
       </ScrollView>
 
       {/* Fixed CTA at bottom */}
-      <View style={styles.fixedBottomBar}>
+      <View style={[styles.fixedBottomBar, responsiveContainerStyle]}>
         <MotiPressable
           accessibilityRole="button"
           onPress={() => {
@@ -240,4 +250,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-

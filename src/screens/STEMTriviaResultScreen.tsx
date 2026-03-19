@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
 import { useAnimatedNumber } from "../hooks/useAnimatedNumber";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { STEMStackParamList } from "../types/navigation";
@@ -21,6 +22,13 @@ export default function STEMTriviaResultScreen({ navigation, route }: Props) {
   const { stemCategories: stemCategoryCatalog } = state.catalogs;
   const category = stemCategoryCatalog.find((c) => c.id === categoryId);
   const rootNavigation = useRootNavigation();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
   const progress = state.stemTriviaProgress[categoryId];
   const percent = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
 
@@ -53,7 +61,7 @@ export default function STEMTriviaResultScreen({ navigation, route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]}>
         <AppHeader
           title={`${category?.title ?? "Category"} Result`}
           subtitle="Session completed"

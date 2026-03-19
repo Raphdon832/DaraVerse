@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AppHeader from "../components/AppHeader";
 import Pressable from "../components/SoundPressable";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { MentorshipStackParamList } from "../types/navigation";
 
@@ -21,6 +22,7 @@ type Props = NativeStackScreenProps<MentorshipStackParamList, "MentorChat">;
 
 export default function MentorChatScreen({ navigation, route }: Props) {
   const { state, sendMentorshipMessage } = useAppState();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
   const [draft, setDraft] = useState("");
 
   const mentor = state.catalogs.mentors.find((item) => item.id === route.params.mentorId);
@@ -29,13 +31,19 @@ export default function MentorChatScreen({ navigation, route }: Props) {
     () => state.mentorshipMessages[route.params.mentorId] ?? [],
     [state.mentorshipMessages, route.params.mentorId],
   );
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   const isUnlocked = requestStatus === "accepted";
 
   if (!mentor) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Chat Unavailable"
             subtitle="Mentor not found"
@@ -50,7 +58,7 @@ export default function MentorChatScreen({ navigation, route }: Props) {
   if (!isUnlocked) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title={`${mentor.name} Chat`}
             subtitle="Locked"
@@ -91,7 +99,7 @@ export default function MentorChatScreen({ navigation, route }: Props) {
         style={styles.flex}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title={`${mentor.name} Chat`}
             subtitle="Mentorship conversation"
@@ -117,26 +125,28 @@ export default function MentorChatScreen({ navigation, route }: Props) {
           />
         </View>
 
-        <View style={styles.composer}>
-          <TextInput
-            value={draft}
-            onChangeText={setDraft}
-            placeholder="Ask your mentor a question..."
-            placeholderTextColor={colors.textMuted}
-            style={styles.input}
-            multiline
-          />
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Send message"
-            onPress={sendMessage}
-            style={({ pressed }) => [
-              styles.sendButton,
-              pressed && styles.sendButtonPressed,
-            ]}
-          >
-            <Text style={styles.sendButtonText}>Send</Text>
-          </Pressable>
+        <View style={responsiveContainerStyle}>
+          <View style={styles.composer}>
+            <TextInput
+              value={draft}
+              onChangeText={setDraft}
+              placeholder="Ask your mentor a question..."
+              placeholderTextColor={colors.textMuted}
+              style={styles.input}
+              multiline
+            />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Send message"
+              onPress={sendMessage}
+              style={({ pressed }) => [
+                styles.sendButton,
+                pressed && styles.sendButtonPressed,
+              ]}
+            >
+              <Text style={styles.sendButtonText}>Send</Text>
+            </Pressable>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

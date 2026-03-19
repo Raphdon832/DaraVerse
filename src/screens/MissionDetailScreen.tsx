@@ -11,6 +11,7 @@ import AppHeader from "../components/AppHeader";
 import { trackSound, untrackAndUnloadSound } from "../audio/audioManager";
 import { useAppState } from "../context/AppStateContext";
 import { getNextCyberQuestMissionId, isCyberQuestMissionId } from "../data/cyberquestMission";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, shadow, spacing, typography } from "../theme/tokens";
 import type { MissionsStackParamList } from "../types/navigation";
@@ -40,6 +41,13 @@ export default function MissionDetailScreen({ navigation, route }: Props) {
   const nextCyberQuestMissionId = missionId === "cyberquest-m1" ? getNextCyberQuestMissionId(missionId) : null;
   const hasNextCyberQuestMission = !!nextCyberQuestMissionId
     && missionCatalog.some((m) => m.id === nextCyberQuestMissionId);
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   const stopAreYouReadyAudio = useCallback(async () => {
     if (!areYouReadySoundRef.current) return;
@@ -91,7 +99,7 @@ export default function MissionDetailScreen({ navigation, route }: Props) {
   if (!mission) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Mission Module"
             subtitle="Experience module not tied to a mission script"
@@ -129,7 +137,7 @@ export default function MissionDetailScreen({ navigation, route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]}>
         <AppHeader
           title={mission.title}
           subtitle={mission.subtitle}

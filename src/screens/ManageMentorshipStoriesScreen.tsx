@@ -9,6 +9,7 @@ import Pressable from "../components/SoundPressable";
 import SearchField from "../components/SearchField";
 import { useAuth } from "../context/AuthContext";
 import { useMentorshipStoryCatalog } from "../hooks/useMentorshipStoryCatalog";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import {
   removeMentorshipStoryAsAdmin,
   setMentorshipStoryHiddenAsAdmin,
@@ -27,9 +28,16 @@ function includesNormalized(haystack: string, query: string) {
 export default function ManageMentorshipStoriesScreen({ navigation }: Props) {
   const { user } = useAuth();
   const { allStories } = useMentorshipStoryCatalog({ includeHidden: true });
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
   const [userRole, setUserRole] = useState<UserRole>("learner");
   const [search, setSearch] = useState("");
   const [busyStoryId, setBusyStoryId] = useState<string | null>(null);
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   const isAdmin = userRole === "admin";
 
@@ -121,7 +129,7 @@ export default function ManageMentorshipStoriesScreen({ navigation }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]} showsVerticalScrollIndicator={false}>
         <AppHeader
           title="Manage Stories"
           subtitle="Admin controls"

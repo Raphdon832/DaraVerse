@@ -16,6 +16,7 @@ import AnimatedButton from "../components/AnimatedButton";
 import AppHeader from "../components/AppHeader";
 import Pressable from "../components/SoundPressable";
 import { useAuth } from "../context/AuthContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { addMentorAsAdmin } from "../services/mentorshipService";
 import {
     subscribeAppUsers,
@@ -44,6 +45,13 @@ export default function AddMentorScreen({ navigation }: Props) {
     const [appUsers, setAppUsers] = useState<AppUserSummary[]>([]);
     const [selectedUser, setSelectedUser] = useState<AppUserSummary | null>(null);
     const [userDirectoryError, setUserDirectoryError] = useState<string | null>(null);
+    const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+    const responsiveContainerStyle = {
+        alignSelf: "center" as const,
+        maxWidth: contentMaxWidth,
+        paddingHorizontal: horizontalPadding,
+        width: "100%" as const,
+    };
 
     const isAdmin = userRole === "admin";
 
@@ -164,7 +172,7 @@ export default function AddMentorScreen({ navigation }: Props) {
                 keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
             >
             <ScrollView
-                contentContainerStyle={styles.content}
+                contentContainerStyle={[styles.content, responsiveContainerStyle]}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
                 keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}

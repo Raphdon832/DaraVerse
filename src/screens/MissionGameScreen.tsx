@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AppHeader from "../components/AppHeader";
 import MotiPressable from "../components/SoundMotiPressable";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { MissionsStackParamList } from "../types/navigation";
@@ -39,9 +40,16 @@ export default function MissionGameScreen({ navigation, route }: Props) {
   const { missionId } = route.params;
   const rootNavigation = useRootNavigation();
   const { state, completeMission } = useAppState();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
   const { missions: missionCatalog, missionGames } = state.catalogs;
   const mission = missionCatalog.find((m) => m.id === missionId);
   const game = missionGames.find((mg) => mg.missionId === missionId);
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   const [phase, setPhase] = useState<GamePhase>("intro");
   const [sessionSeed, setSessionSeed] = useState(0);
@@ -107,7 +115,7 @@ export default function MissionGameScreen({ navigation, route }: Props) {
   if (!mission || !game) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <View style={styles.content}>
+        <View style={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Mission Game"
             subtitle="Game module unavailable"
@@ -213,7 +221,7 @@ export default function MissionGameScreen({ navigation, route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]} showsVerticalScrollIndicator={false}>
         <AppHeader
           title={mission.title}
           subtitle={game.gameSubtitle}

@@ -6,6 +6,7 @@ import AnimatedButton from "../components/AnimatedButton";
 import AppHeader from "../components/AppHeader";
 import Pressable from "../components/SoundPressable";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { MentorshipStackParamList } from "../types/navigation";
 
@@ -20,13 +21,20 @@ const statusLabels = {
 
 export default function MentorProfileScreen({ navigation, route }: Props) {
   const { state, updateMentorshipRequestStatus } = useAppState();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
   const mentor = state.catalogs.mentors.find((item) => item.id === route.params.mentorId);
   const requestStatus = state.mentorshipRequests[route.params.mentorId]?.status ?? "none";
 
   if (!mentor) {
     return (
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]}>
           <AppHeader
             title="Mentor Not Found"
             subtitle="This mentor may have been removed"
@@ -48,7 +56,7 @@ export default function MentorProfileScreen({ navigation, route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]} showsVerticalScrollIndicator={false}>
         <AppHeader
           title={mentor.name}
           subtitle="Mentor Profile"

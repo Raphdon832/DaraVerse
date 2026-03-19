@@ -11,6 +11,7 @@ import Pressable from "../components/SoundPressable";
 import { useAuth } from "../context/AuthContext";
 import { type StoryHeritageFocus } from "../data/mentorshipStories";
 import { useMentorshipStoryCatalog } from "../hooks/useMentorshipStoryCatalog";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { subscribeUserRole, type UserRole } from "../services/userService";
 import { colors, radius, spacing, typography } from "../theme/tokens";
@@ -41,6 +42,13 @@ export default function MentorshipStoriesScreen({ navigation }: Props) {
   const [focusFilter, setFocusFilter] = useState<FocusFilter>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const { stories, counts } = useMentorshipStoryCatalog();
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
   const isAdmin = userRole === "admin";
 
   const visibleStories = useMemo(() => {
@@ -107,7 +115,7 @@ export default function MentorshipStoriesScreen({ navigation }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <View style={styles.headerContainer}>
+      <View style={[styles.headerContainer, responsiveContainerStyle]}>
         <AppHeader
           title="Mentorship Stories"
           subtitle={`${counts.total} biographies with story trivia`}
@@ -117,7 +125,7 @@ export default function MentorshipStoriesScreen({ navigation }: Props) {
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, responsiveContainerStyle]}
         showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[0]}
       >

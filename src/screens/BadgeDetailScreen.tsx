@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { AchievementsStackParamList } from "../types/navigation";
@@ -21,6 +22,13 @@ export default function BadgeDetailScreen({ route }: Props) {
   const rootNavigation = useRootNavigation();
   const unlocked = state.unlockedBadgeIds.includes(badgeId);
   const isDarkBg = state.theme.appBgColor === "#1E293B";
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   const getBadgeIcon = (id: string) => {
     if (id.includes("daily-goal")) return state.theme.iconType === "filled" ? "flame" : "flame-outline";
@@ -30,13 +38,15 @@ export default function BadgeDetailScreen({ route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <View style={responsiveContainerStyle}>
         <AppHeader
           title="Badge Detail"
           subtitle={badge?.name ?? "Badge"}
           showHomeAction
           onPressHome={() => rootNavigation.goBack()}
         />
+      </View>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]}>
 
         <MotiView
           from={{ opacity: 0, scale: 0.9 }}

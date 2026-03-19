@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { AchievementsStackParamList } from "../types/navigation";
@@ -18,6 +19,13 @@ export default function CertificateDetailScreen({ route }: Props) {
   const certificate = certificateCatalog.find((item) => item.id === certificateId);
   const rootNavigation = useRootNavigation();
   const unlocked = state.unlockedCertificateIds.includes(certificateId);
+  const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+  const responsiveContainerStyle = {
+    alignSelf: "center" as const,
+    maxWidth: contentMaxWidth,
+    paddingHorizontal: horizontalPadding,
+    width: "100%" as const,
+  };
 
   const completedMissions = Object.values(state.missionProgress).filter(
     (progress) => progress.status === "completed"
@@ -28,13 +36,15 @@ export default function CertificateDetailScreen({ route }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <View style={responsiveContainerStyle}>
         <AppHeader
           title="Certificate Detail"
           subtitle={certificate?.name ?? "Certificate"}
           showHomeAction
           onPressHome={() => rootNavigation.goBack()}
         />
+      </View>
+      <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]}>
 
         <MotiView
           from={{ opacity: 0, scale: 0.9 }}
