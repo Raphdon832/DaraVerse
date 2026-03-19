@@ -39,3 +39,10 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# local build cache/output
+.gradle/
+.gradle-apk-build/
+out*.txt
+tsc.log
+tsc_output.txt

@@ -4,18 +4,45 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
+    "set:user-role": "node scripts/set-user-role.mjs"
   },
   "dependencies": {
-    "expo": "~55.0.4",
-    "expo-status-bar": "~55.0.4",
-    "react": "19.2.0",
-    "react-native": "0.83.2"
+    "@expo/vector-icons": "^15.0.2",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-community/netinfo": "11.4.1",
+    "@react-navigation/bottom-tabs": "^7.15.3",
+    "@react-navigation/native": "^7.1.31",
+    "@react-navigation/native-stack": "^7.14.2",
+    "expo": "~54.0.33",
+    "expo-auth-session": "~7.0.10",
+    "expo-av": "~16.0.8",
+    "expo-crypto": "~15.0.8",
+    "expo-font": "~14.0.11",
+    "expo-haptics": "~15.0.8",
+    "expo-status-bar": "~3.0.9",
+    "expo-web-browser": "~15.0.10",
+    "firebase": "^12.10.0",
+    "idb": "^8.0.0",
+    "lottie-react-native": "~7.3.1",
+    "moti": "^0.30.0",
+    "prop-types": "^15.8.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-gesture-handler": "~2.28.0",
+    "react-native-reanimated": "~4.1.1",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0",
+    "react-native-svg": "15.12.1",
+    "react-native-web": "^0.21.2",
+    "react-native-worklets": "0.5.1"
   },
   "devDependencies": {
-    "@types/react": "~19.2.2",
+    "@types/react": "~19.1.10",
+    "firebase-admin": "^13.7.0",
     "typescript": "~5.9.2"
   },
   "private": true

@@ -1,0 +1,51 @@
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: adaptiveTextColor }]}>Today's Plan</Text>
+            <Text style={styles.planMeta}>{visiblePlanTasks.length} tasks</Text>
+          </View>
+          <View style={styles.planList}>
+            {visiblePlanTasks.map((task) => (
+              <View key={task.id} style={[styles.planCard, { backgroundColor: adaptiveCardBg }]}>
+                <View style={styles.planCardTop}>
+                  <Text style={[styles.planDuration, { color: state.theme.primaryColor }]}>{task.durationLabel}</Text>
+                  <MotiPressable
+                    onPress={task.onPress}
+                    animate={pressScale94}
+                    style={[styles.planActionButton, { borderColor: state.theme.primaryColor }]}
+                  >
+                    <Text style={[styles.planActionText, { color: state.theme.primaryColor }]}>{task.actionLabel}</Text>
+                  </MotiPressable>
+                </View>
+                <Text style={[styles.planTitle, { color: adaptiveTextColor }]}>{task.title}</Text>
+                <Text style={styles.planSubtitle}>{task.subtitle}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: adaptiveTextColor }]}>Quick Actions</Text>
+          </View>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.quickActionsScroll}
+            style={styles.fullWidthScroll}
+          >
+            {quickActions.map((action) => (
+              <MotiPressable
+                key={action.id}
+                onPress={action.onPress}
+                animate={pressScale95}
+                style={[styles.quickActionPill, { backgroundColor: action.color }]}
+              >
+                <Ionicons
+                  name={(state.theme.iconType === "filled"
+                    ? action.icon.replace("-outline", "")
+                    : action.icon) as any}
+                  size={18}
+                  color={colors.textPrimary}
+                />
+                <Text style={styles.quickActionLabelPill}>{action.label}</Text>
+              </MotiPressable>
+            ))}
+          </ScrollView>
+
