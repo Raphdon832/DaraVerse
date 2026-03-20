@@ -10,6 +10,7 @@ import AppHeader from "../components/AppHeader";
 import BackButton from "../components/BackButton";
 import { useAppState } from "../context/AppStateContext";
 import { defaultAgeBracket, getAgeBracketLabel } from "../data/ageBrackets";
+import { backToStemHome } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -45,7 +46,7 @@ export default function STEMCategoryScreen({ navigation, route }: Props) {
           title={category?.title ?? "Category"}
           subtitle="Trivia Adventure"
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToStemHome(rootNavigation)}
         />
       </View>
 

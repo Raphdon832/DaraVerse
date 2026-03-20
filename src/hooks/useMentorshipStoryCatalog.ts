@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { useAuth } from "../context/AuthContext";
 import { mentorshipStoryCatalog } from "../data/mentorshipStories";
 import {
   mergeMentorshipStoryCatalog,
@@ -34,11 +35,23 @@ function deriveCounts(stories: MentorshipStoryCatalogItem[]): MentorshipStoryCou
 }
 
 export function useMentorshipStoryCatalog(options: Options = {}) {
+  const { user, isLoading: isAuthLoading } = useAuth();
   const includeHidden = options.includeHidden ?? false;
   const [overrides, setOverrides] = useState<MentorshipStoryOverrideDoc[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isAuthLoading) {
+      setIsLoading(true);
+      return;
+    }
+
+    if (!user) {
+      setOverrides([]);
+      setIsLoading(false);
+      return;
+    }
+
     const unsubscribe = subscribeToMentorshipStoryOverrides(
       (entries) => {
         setOverrides(entries);
@@ -51,7 +64,7 @@ export function useMentorshipStoryCatalog(options: Options = {}) {
     );
 
     return unsubscribe;
-  }, []);
+  }, [isAuthLoading, user]);
 
   const allStories = useMemo(
     () => mergeMentorshipStoryCatalog(mentorshipStoryCatalog, overrides),

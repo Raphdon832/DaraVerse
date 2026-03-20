@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { backToMissionDetail } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -52,15 +53,8 @@ export default function MissionReflectionScreen({ navigation, route }: Props) {
   }, [maxScore, mission, missionId, sessionScore, state.missionProgress]);
 
   const handleHeaderBack = useCallback(() => {
-    if (rootNavigation.canGoBack()) {
-      rootNavigation.goBack();
-      return;
-    }
-    rootNavigation.navigate("MainTabs", {
-      screen: "Missions",
-      initialTab: "Missions",
-    });
-  }, [rootNavigation]);
+    backToMissionDetail(rootNavigation, missionId);
+  }, [missionId, rootNavigation]);
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>

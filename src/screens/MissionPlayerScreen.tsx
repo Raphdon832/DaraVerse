@@ -118,10 +118,6 @@ export default function MissionPlayerScreen({ navigation, route }: Props) {
 
   const exitStorySummary = useCallback(() => {
     void stopNarration();
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-      return;
-    }
     navigation.navigate("MissionDetail", { missionId });
   }, [missionId, navigation, stopNarration]);
 

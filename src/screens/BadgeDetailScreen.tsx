@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { backToAchievementsHome } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -43,7 +44,7 @@ export default function BadgeDetailScreen({ route }: Props) {
           title="Badge Detail"
           subtitle={badge?.name ?? "Badge"}
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToAchievementsHome(rootNavigation)}
         />
       </View>
       <ScrollView contentContainerStyle={[styles.content, responsiveContainerStyle]}>

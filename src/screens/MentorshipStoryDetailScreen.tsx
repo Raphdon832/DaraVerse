@@ -8,6 +8,7 @@ import {
   heritageLabel,
 } from "../data/mentorshipStories";
 import { useMentorshipStoryCatalog } from "../hooks/useMentorshipStoryCatalog";
+import { backToMentorshipStories } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, spacing, typography } from "../theme/tokens";
@@ -58,7 +59,7 @@ export default function MentorshipStoryDetailScreen({ navigation, route }: Props
             title="Story Detail"
             subtitle="Story not found"
             showHomeAction
-            onPressHome={() => rootNavigation.goBack()}
+            onPressHome={() => backToMentorshipStories(rootNavigation)}
           />
           <View style={styles.card}>
             <Text style={styles.title}>Missing Story</Text>
@@ -78,7 +79,7 @@ export default function MentorshipStoryDetailScreen({ navigation, route }: Props
           title={story.name}
           subtitle={`${story.origin} • ${story.domains.join(" + ")}`}
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToMentorshipStories(rootNavigation)}
         />
 
         <View style={styles.heroCard}>
@@ -291,3 +292,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+

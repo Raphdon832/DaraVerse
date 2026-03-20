@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AppHeader from "../components/AppHeader";
 import FeatureCard from "../components/FeatureCard";
 import { useAppState } from "../context/AppStateContext";
+import { backToHomeHub } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, spacing, typography } from "../theme/tokens";
@@ -68,7 +69,7 @@ export default function ProjectsHomeScreen({ navigation }: Props) {
           title="Projects"
           subtitle="Turn missions and STEM into portfolio-ready work"
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToHomeHub(rootNavigation)}
         />
 
         <MotiView

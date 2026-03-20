@@ -11,6 +11,7 @@ import {
   type MentorshipStoryTriviaQuestion,
 } from "../data/mentorshipStories";
 import { useMentorshipStoryCatalog } from "../hooks/useMentorshipStoryCatalog";
+import { backToMentorshipStoryDetail } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -131,7 +132,7 @@ export default function MentorshipStoryTriviaScreen({ navigation, route }: Props
             title="Story Trivia"
             subtitle="Story not found"
             showHomeAction
-            onPressHome={() => rootNavigation.goBack()}
+            onPressHome={() => backToMentorshipStoryDetail(rootNavigation, route.params.storyId)}
           />
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>Missing Story</Text>
@@ -151,7 +152,7 @@ export default function MentorshipStoryTriviaScreen({ navigation, route }: Props
           title={`${story.name} Trivia`}
           subtitle="Random 10 from 50 story questions"
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToMentorshipStoryDetail(rootNavigation, route.params.storyId)}
         />
 
         {phase === "intro" ? (

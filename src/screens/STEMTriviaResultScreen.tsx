@@ -49,15 +49,8 @@ export default function STEMTriviaResultScreen({ navigation, route }: Props) {
   };
 
   const handleHeaderBack = useCallback(() => {
-    if (rootNavigation.canGoBack()) {
-      rootNavigation.goBack();
-      return;
-    }
-    rootNavigation.navigate("MainTabs", {
-      screen: "STEM",
-      initialTab: "STEM",
-    });
-  }, [rootNavigation]);
+    navigation.navigate("STEMCategory", { categoryId });
+  }, [categoryId, navigation]);
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>

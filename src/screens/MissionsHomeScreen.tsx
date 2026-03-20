@@ -11,6 +11,7 @@ import BackButton from "../components/BackButton";
 import Pressable from "../components/SoundPressable";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
+import { backToHomeHub } from "../navigation/backNavigation";
 import { useAppState } from "../context/AppStateContext";
 import { isCyberQuestMissionId } from "../data/cyberquestMission";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -176,7 +177,7 @@ export default function MissionsHomeScreen({ navigation }: Props) {
             >
               <BackButton
                 accessibilityLabel="Go to previous screen"
-                onPress={() => rootNavigation.goBack()}
+                onPress={() => backToHomeHub(rootNavigation)}
               />
               <Pressable
                 accessibilityRole="button"

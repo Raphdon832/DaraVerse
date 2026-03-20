@@ -11,6 +11,7 @@ import AppHeader from "../components/AppHeader";
 import { trackSound, untrackAndUnloadSound } from "../audio/audioManager";
 import { useAppState } from "../context/AppStateContext";
 import { getNextCyberQuestMissionId, isCyberQuestMissionId } from "../data/cyberquestMission";
+import { backToMissionsHome } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, shadow, spacing, typography } from "../theme/tokens";
@@ -106,7 +107,7 @@ export default function MissionDetailScreen({ navigation, route }: Props) {
             showHomeAction
             onPressHome={() => {
               void stopAreYouReadyAudio();
-              rootNavigation.goBack();
+              backToMissionsHome(rootNavigation);
             }}
           />
           <View style={styles.card}>
@@ -144,7 +145,7 @@ export default function MissionDetailScreen({ navigation, route }: Props) {
           showHomeAction
           onPressHome={() => {
             void stopAreYouReadyAudio();
-            rootNavigation.goBack();
+            backToMissionsHome(rootNavigation);
           }}
         />
 

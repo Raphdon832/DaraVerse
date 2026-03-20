@@ -11,6 +11,7 @@ import Pressable from "../components/SoundPressable";
 import { useAuth } from "../context/AuthContext";
 import { type StoryHeritageFocus } from "../data/mentorshipStories";
 import { useMentorshipStoryCatalog } from "../hooks/useMentorshipStoryCatalog";
+import { backToMentorshipHome } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { subscribeUserRole, type UserRole } from "../services/userService";
@@ -120,7 +121,7 @@ export default function MentorshipStoriesScreen({ navigation }: Props) {
           title="Mentorship Stories"
           subtitle={`${counts.total} biographies with story trivia`}
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToMentorshipHome(rootNavigation)}
         />
       </View>
 

@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { backToProjectDetail } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -46,7 +47,7 @@ export default function ProjectSubmissionScreen({ navigation, route }: Props) {
             title="Project Submission"
             subtitle="Project not found"
             showHomeAction
-            onPressHome={() => rootNavigation.goBack()}
+            onPressHome={() => backToProjectDetail(rootNavigation, projectId)}
           />
         </View>
       </SafeAreaView>
@@ -65,7 +66,7 @@ export default function ProjectSubmissionScreen({ navigation, route }: Props) {
           title="Project Submission"
           subtitle={project.title}
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToProjectDetail(rootNavigation, projectId)}
         />
       </View>
       <ScrollView

@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AppHeader from "../components/AppHeader";
 import MotiPressable from "../components/SoundMotiPressable";
 import { useAppState } from "../context/AppStateContext";
+import { backToMissionDetail } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -89,15 +90,8 @@ export default function MissionGameScreen({ navigation, route }: Props) {
   const accuracyPercent = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
 
   const handleExitGame = useCallback(() => {
-    if (rootNavigation.canGoBack()) {
-      rootNavigation.goBack();
-      return;
-    }
-    rootNavigation.navigate("MainTabs", {
-      screen: "Missions",
-      initialTab: "Missions",
-    });
-  }, [rootNavigation]);
+    backToMissionDetail(rootNavigation, missionId);
+  }, [missionId, rootNavigation]);
 
   const handleSubmitMissionResult = useCallback(
     (sessionScore: number, sessionMaxScore: number) => {
@@ -129,11 +123,7 @@ export default function MissionGameScreen({ navigation, route }: Props) {
             </Text>
             <MotiPressable
               onPress={() => {
-                if (navigation.canGoBack()) {
-                  navigation.goBack();
-                } else {
-                  navigation.navigate("MissionsHome");
-                }
+                navigation.navigate("MissionDetail", { missionId });
               }}
               animate={() => {
                 "worklet";

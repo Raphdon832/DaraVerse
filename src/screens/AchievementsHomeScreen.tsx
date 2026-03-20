@@ -11,6 +11,7 @@ import AppHeader from "../components/AppHeader";
 import FeatureCard from "../components/FeatureCard";
 import ProgressCard from "../components/ProgressCard";
 import { useAppState } from "../context/AppStateContext";
+import { backToHomeHub } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -23,7 +24,7 @@ type Props = NativeStackScreenProps<AchievementsStackParamList, "AchievementsHom
 export default function AchievementsHomeScreen({ navigation }: Props) {
   const rootNavigation = useRootNavigation();
   const { state } = useAppState();
-  const { contentMaxWidth, horizontalPadding, isDesktop, isLargeScreen } =
+  const { width, contentMaxWidth, horizontalPadding, isDesktop, isLargeScreen } =
     useResponsiveLayout();
   const { badges: badgeCatalog, certificates: certificateCatalog } = state.catalogs;
   const isDarkBg = state.theme.appBgColor === "#1E293B";
@@ -66,9 +67,23 @@ export default function AchievementsHomeScreen({ navigation }: Props) {
         alignSelf: "center" as const,
         maxWidth: contentMaxWidth,
         paddingHorizontal: horizontalPadding,
+        width: "100%" as const,
       },
     ],
     [contentMaxWidth, horizontalPadding],
+  );
+
+  const horizontalGoalCardWidth = useMemo(() => {
+    if (isDesktop) return 250;
+    if (isLargeScreen) return 225;
+
+    const availableWidth = width - horizontalPadding * 2 - spacing.md * 2;
+    return Math.max(176, Math.min(230, availableWidth));
+  }, [horizontalPadding, isDesktop, isLargeScreen, width]);
+
+  const mobileProgressRowStyle = useMemo(
+    () => (width < 520 ? styles.progressRowStacked : undefined),
+    [width],
   );
 
   const getBadgeIcon = (id: string) => {
@@ -96,9 +111,7 @@ export default function AchievementsHomeScreen({ navigation }: Props) {
             style={[
               styles.badgeCard,
               isHorizontal ? styles.horizontalBadgeCard : undefined,
-              isHorizontal
-                ? { width: isDesktop ? 240 : isLargeScreen ? 220 : 200 }
-                : undefined,
+              isHorizontal ? { width: horizontalGoalCardWidth } : styles.fullWidthBadgeCard,
               unlocked ? styles.badgeCardUnlocked : styles.badgeCardLocked,
               unlocked && { backgroundColor: "transparent" },
             ]}
@@ -113,10 +126,10 @@ export default function AchievementsHomeScreen({ navigation }: Props) {
             {isHorizontal ? (
               <View style={styles.badgeHeaderWrap}>
                 <Ionicons name={getBadgeIcon(badge.id) as any} size={28} color={unlocked ? (isDarkBg ? "#FFFFFF" : state.theme.primaryColor) : colors.textSecondary} style={{ marginBottom: spacing.xs }} />
-                <Text style={[styles.badgeTitle, unlocked && { color: "#FFFFFF", textShadowColor: "rgba(0,0,0,0.5)", textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2 }]} numberOfLines={1}>
+                <Text style={[styles.badgeTitle, styles.horizontalBadgeTitle, unlocked && { color: "#FFFFFF", textShadowColor: "rgba(0,0,0,0.5)", textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2 }]}>
                   {badge.name}
                 </Text>
-                <Text style={[styles.badgeMeta, { marginTop: spacing.xs, opacity: 0.8 }, unlocked && { color: "rgba(255,255,255,0.9)", textShadowColor: "rgba(0,0,0,0.5)", textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2 }]} numberOfLines={3}>
+                <Text style={[styles.badgeDescription, unlocked && { color: "rgba(255,255,255,0.9)", textShadowColor: "rgba(0,0,0,0.5)", textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2 }]}>
                   {badge.description}
                 </Text>
               </View>
@@ -144,8 +157,9 @@ export default function AchievementsHomeScreen({ navigation }: Props) {
           <Text style={styles.sectionTitle}>Daily Goals</Text>
           <ScrollView
             horizontal
+            style={styles.horizontalScrollView}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScroll}
+            contentContainerStyle={[styles.horizontalScroll, { paddingRight: horizontalPadding }]}
           >
             {renderBadgeList(dailyGoals, 0, true)}
           </ScrollView>
@@ -161,8 +175,9 @@ export default function AchievementsHomeScreen({ navigation }: Props) {
           <Text style={styles.sectionTitle}>Weekly Goals</Text>
           <ScrollView
             horizontal
+            style={styles.horizontalScrollView}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScroll}
+            contentContainerStyle={[styles.horizontalScroll, { paddingRight: horizontalPadding }]}
           >
             {renderBadgeList(weeklyGoals, dailyGoals.length, true)}
           </ScrollView>
@@ -189,12 +204,16 @@ export default function AchievementsHomeScreen({ navigation }: Props) {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
-      <ScrollView contentContainerStyle={contentContainerStyle} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={contentContainerStyle}
+        showsVerticalScrollIndicator={false}
+      >
         <AppHeader
           title="Achievements"
           subtitle="Badges, goals, and milestone progress"
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToHomeHub(rootNavigation)}
         />
 
         {isDesktop ? (
@@ -246,7 +265,7 @@ export default function AchievementsHomeScreen({ navigation }: Props) {
               from={{ opacity: 0, translateY: 20 }}
               animate={{ opacity: 1, translateY: 0 }}
               transition={{ type: "spring", delay: 100 }}
-              style={styles.progressRow}
+              style={[styles.progressRow, mobileProgressRowStyle]}
             >
               <ProgressCard
                 label="Total Badges"
@@ -291,6 +310,10 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.pastelGreen,
+    overflow: "hidden",
+  },
+  scroll: {
+    flex: 1,
   },
   content: {
     padding: spacing.md,
@@ -316,6 +339,9 @@ const styles = StyleSheet.create({
   desktopProgressRow: {
     flexDirection: "column",
   },
+  progressRowStacked: {
+    flexDirection: "column",
+  },
   sectionTitle: {
     color: colors.textPrimary,
     fontSize: typography.subheading,
@@ -327,13 +353,15 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     paddingBottom: spacing.md,
   },
+  horizontalScrollView: {
+    width: "100%",
+  },
   horizontalBadgeCard: {
-    width: 200,
-    height: 160,
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
+    minHeight: 200,
   },
   badgeHeaderWrap: {
-    flex: 1,
+    flexShrink: 1,
   },
   badgeWrap: {
     gap: spacing.sm,
@@ -345,6 +373,9 @@ const styles = StyleSheet.create({
     ...shadow.card,
     overflow: "hidden",
   },
+  fullWidthBadgeCard: {
+    width: "100%",
+  },
   badgeCardUnlocked: {
     backgroundColor: colors.bgSurface,
   },
@@ -355,6 +386,17 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: typography.body,
     fontWeight: "800",
+  },
+  horizontalBadgeTitle: {
+    lineHeight: 22,
+  },
+  badgeDescription: {
+    color: colors.textSecondary,
+    fontSize: typography.caption,
+    fontWeight: "600",
+    lineHeight: 20,
+    marginTop: spacing.xs,
+    opacity: 0.85,
   },
   badgeMeta: {
     color: colors.textSecondary,

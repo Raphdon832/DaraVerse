@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
+import { backToHomeHub } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -26,7 +27,7 @@ export default function GenericDetailScreen() {
           title={route.name}
           subtitle="Detail view"
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToHomeHub(rootNavigation)}
         />
         <MotiView
           from={{ opacity: 0, translateY: 20 }}

@@ -1,6 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { Image, StyleSheet, Text, View, type ImageSourcePropType } from "react-native";
+import { Image, Platform, StyleSheet, Text, View, type ImageSourcePropType } from "react-native";
 
 import BackButton from "./BackButton";
 import Pressable from "./SoundPressable";
@@ -39,7 +38,6 @@ export default function AppHeader({
   showLogo = false,
   subtitleTop = false,
 }: AppHeaderProps) {
-  const navigation = useNavigation();
   const rootNavigation = useRootNavigation();
   const { unreadCount } = useNotifications();
 
@@ -48,9 +46,7 @@ export default function AppHeader({
       onPressHome();
       return;
     }
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    }
+    rootNavigation.navigate("HomeHub");
   };
 
   const handleSearchPress = () => {
@@ -142,6 +138,7 @@ export default function AppHeader({
 
 const styles = StyleSheet.create({
   wrapper: {
+    paddingTop: Platform.OS === "web" ? spacing.lg : spacing.sm,
     marginBottom: spacing.md,
   },
   row: {

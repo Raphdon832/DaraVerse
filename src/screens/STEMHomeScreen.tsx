@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppHeader from "../components/AppHeader";
 import { useAppState } from "../context/AppStateContext";
+import { backToHomeHub } from "../navigation/backNavigation";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
@@ -114,7 +115,7 @@ export default function STEMHomeScreen({ navigation }: Props) {
           title="STEM"
           subtitle="Play category trivia and build mastery"
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToHomeHub(rootNavigation)}
         />
       </View>
 

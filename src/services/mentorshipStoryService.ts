@@ -21,6 +21,7 @@ import { db } from "../config/firebase";
 import { loadUserRole } from "./userService";
 
 const MENTORSHIP_STORIES_COLLECTION = "catalogs_mentorshipStories";
+let hasLoggedMentorshipStoryPermissionWarning = false;
 
 const BASE_STORY_ID_SET = new Set(mentorshipStoryCatalog.map((story) => story.id));
 
@@ -527,7 +528,16 @@ export function subscribeToMentorshipStoryOverrides(
       callback(entries);
     },
     (error) => {
-      console.error("subscribeToMentorshipStoryOverrides error:", error);
+      if (error.code === "permission-denied") {
+        if (!hasLoggedMentorshipStoryPermissionWarning) {
+          hasLoggedMentorshipStoryPermissionWarning = true;
+          console.warn(
+            "Mentorship story overrides are not readable with the current Firestore permissions. Falling back to built-in story catalog.",
+          );
+        }
+      } else {
+        console.error("subscribeToMentorshipStoryOverrides error:", error);
+      }
       callback([]);
       onError?.(error);
     },

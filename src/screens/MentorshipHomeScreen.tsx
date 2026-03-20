@@ -10,6 +10,7 @@ import Pressable from "../components/SoundPressable";
 import { useAppState } from "../context/AppStateContext";
 import { useAuth } from "../context/AuthContext";
 import { useMentorshipStoryCatalog } from "../hooks/useMentorshipStoryCatalog";
+import { backToHomeHub } from "../navigation/backNavigation";
 import { useResponsiveLayout } from "../hooks/useResponsiveLayout";
 import { useRootNavigation } from "../hooks/useRootNavigation";
 import { subscribeUserRole, type UserRole } from "../services/userService";
@@ -98,7 +99,7 @@ export default function MentorshipHomeScreen({ navigation }: Props) {
           title="Mentorship"
           subtitle="Get guidance from STEM and leadership mentors"
           showHomeAction
-          onPressHome={() => rootNavigation.goBack()}
+          onPressHome={() => backToHomeHub(rootNavigation)}
         />
 
         {isDesktop ? (
