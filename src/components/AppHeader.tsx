@@ -4,6 +4,7 @@ import { Image, StyleSheet, Text, View, type ImageSourcePropType } from "react-n
 
 import BackButton from "./BackButton";
 import Pressable from "./SoundPressable";
+import { useRootNavigation } from "../hooks/useRootNavigation";
 import { colors, radius, spacing, typography } from "../theme/tokens";
 import { useNotifications } from "../hooks/useNotifications";
 
@@ -14,6 +15,8 @@ type AppHeaderProps = {
   onPressHome?: () => void;
   showNotification?: boolean;
   onPressNotification?: () => void;
+  showSearch?: boolean;
+  onPressSearch?: () => void;
   avatarSource?: ImageSourcePropType;
   onPressAvatar?: () => void;
   textColor?: string;
@@ -28,6 +31,8 @@ export default function AppHeader({
   onPressHome,
   showNotification = false,
   onPressNotification,
+  showSearch = showHomeAction,
+  onPressSearch,
   avatarSource,
   onPressAvatar,
   textColor = colors.textPrimary,
@@ -35,6 +40,7 @@ export default function AppHeader({
   subtitleTop = false,
 }: AppHeaderProps) {
   const navigation = useNavigation();
+  const rootNavigation = useRootNavigation();
   const { unreadCount } = useNotifications();
 
   const handleBackPress = () => {
@@ -45,6 +51,14 @@ export default function AppHeader({
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
+  };
+
+  const handleSearchPress = () => {
+    if (onPressSearch) {
+      onPressSearch();
+      return;
+    }
+    rootNavigation.navigate("HomeHub");
   };
 
   return (
@@ -95,6 +109,16 @@ export default function AppHeader({
         </View>
 
         <View style={styles.rightSlot}>
+          {showSearch ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Search across the app"
+              onPress={handleSearchPress}
+              style={({ pressed }) => [styles.iconOnlyButton, pressed && styles.pressedButton]}
+            >
+              <Ionicons name="search-outline" size={22} color={textColor} />
+            </Pressable>
+          ) : null}
           {showNotification ? (
             <Pressable
               accessibilityRole="button"
@@ -131,8 +155,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rightSlot: {
-    width: 44,
-    alignItems: "flex-end",
+    minWidth: 44,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: spacing.xs,
   },
   textBlock: {
     flex: 1,

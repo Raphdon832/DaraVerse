@@ -4,7 +4,7 @@ import * as Haptics from "expo-haptics";
 import { MotiView } from "moti";
 import MotiPressable from "../components/SoundMotiPressable";
 import { useMemo } from "react";
-import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import BackButton from "../components/BackButton";
@@ -17,6 +17,7 @@ import { colors, radius, shadow, spacing, typography } from "../theme/tokens";
 import type { MissionsStackParamList } from "../types/navigation";
 
 type Props = NativeStackScreenProps<MissionsStackParamList, "MissionsHome">;
+const CYBERQUEST_BANNER_ASPECT_RATIO = 1600 / 619;
 
 const iconMap = [
   { imgColor: colors.pastelPink, icon: "shield-checkmark-outline" },
@@ -115,17 +116,17 @@ export default function MissionsHomeScreen({ navigation }: Props) {
           style={[styles.card, isDesktop && styles.desktopCard]}
         >
           {isCyberQuest ? (
-            <ImageBackground
-              source={require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest landscape splash.png")}
-              style={styles.cardImgPlaceholder}
-              imageStyle={styles.cardImgBackground}
-              resizeMode="cover"
-            >
+            <View style={styles.cyberQuestCardImg}>
+              <Image
+                source={require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest landscape splash.png")}
+                style={styles.cyberQuestCardImageAsset}
+                resizeMode="contain"
+              />
               <View style={styles.interactiveBadge}>
                 <Ionicons name={missionTypeIcon as any} size={12} color="#fff" />
                 <Text style={styles.interactiveBadgeText}>{missionTypeLabel}</Text>
               </View>
-            </ImageBackground>
+            </View>
           ) : (
             <View style={[styles.cardImgPlaceholder, { backgroundColor: styleAsset.imgColor }]}>
               <Ionicons name={styleAsset.icon as any} size={64} color="#FFF" style={{ opacity: 0.8 }} />
@@ -177,7 +178,11 @@ export default function MissionsHomeScreen({ navigation }: Props) {
                 accessibilityLabel="Go to previous screen"
                 onPress={() => rootNavigation.goBack()}
               />
-              <Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Search across the app"
+                onPress={() => rootNavigation.navigate("HomeHub")}
+              >
                 <Ionicons name="search" size={24} color={colors.textPrimary} />
               </Pressable>
             </View>
@@ -372,7 +377,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     overflow: "hidden",
   },
-  cardImgBackground: {
+  cyberQuestCardImg: {
+    margin: 8,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    overflow: "hidden",
+    aspectRatio: CYBERQUEST_BANNER_ASPECT_RATIO,
+    alignSelf: "stretch",
+  },
+  cyberQuestCardImageAsset: {
+    width: "100%",
+    height: "100%",
     borderRadius: 30,
   },
   cardTextRow: {
