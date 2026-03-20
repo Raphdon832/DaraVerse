@@ -3,13 +3,14 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { MotiView } from "moti";
 import MotiPressable from "../components/SoundMotiPressable";
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import {
     ActivityIndicator,
     Alert,
     Image,
     KeyboardAvoidingView,
     Modal,
+    PanResponder,
     Platform,
     ScrollView,
     StyleSheet,
@@ -58,7 +59,7 @@ type SettingsModalKey =
 
 export default function ProfileScreen({ navigation }: Props) {
     const { state, registerLearner, updateSettings } = useAppState();
-    const { contentMaxWidth, horizontalPadding } = useResponsiveLayout();
+    const { contentMaxWidth, horizontalPadding, isDesktop, isTablet } = useResponsiveLayout();
     const { stemCategories: stemCategoryCatalog, missions: missionCatalog } = state.catalogs;
     const { user } = useAuth();
     const selectedAvatar = getAvatarById(state.learner.avatarId) ?? avatarOptions[0];
@@ -77,6 +78,8 @@ export default function ProfileScreen({ navigation }: Props) {
 
     // Settings modals
     const [activeSettingsModal, setActiveSettingsModal] = useState<SettingsModalKey>(null);
+    const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+    const isClosingSettingsModalRef = useRef(false);
 
     // Edit Profile state
     const [editName, setEditName] = useState(state.learner.firstName);
@@ -87,6 +90,9 @@ export default function ProfileScreen({ navigation }: Props) {
     const modalScale = useSharedValue(0.5);
     const modalOpacity = useSharedValue(0);
     const modalTranslateY = useSharedValue(50);
+    const settingsBackdropOpacity = useSharedValue(0);
+    const settingsSheetTranslateY = useSharedValue(isDesktop || isTablet ? 28 : 300);
+    const settingsSheetScale = useSharedValue(isDesktop || isTablet ? 0.96 : 1);
 
     const startSpin = useCallback(() => {
         spinValue.value = 0;
@@ -152,6 +158,9 @@ export default function ProfileScreen({ navigation }: Props) {
     // ”—€ Settings handlers ”—€
     const openSettingsModal = (key: SettingsModalKey) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        if (isClosingSettingsModalRef.current) {
+            isClosingSettingsModalRef.current = false;
+        }
         if (key === "editProfile") {
             setEditName(state.learner.firstName);
             setEditAvatarId(state.learner.avatarId ?? avatarOptions[0].id);
@@ -161,7 +170,144 @@ export default function ProfileScreen({ navigation }: Props) {
         setActiveSettingsModal(key);
     };
 
-    const closeSettingsModal = () => setActiveSettingsModal(null);
+    const hideSettingsModalAfterAnimation = useCallback(() => {
+        setSettingsModalVisible(false);
+        setActiveSettingsModal(null);
+        isClosingSettingsModalRef.current = false;
+    }, []);
+
+    const closeSettingsModal = useCallback(() => {
+        if (!settingsModalVisible || isClosingSettingsModalRef.current) {
+            return;
+        }
+
+        isClosingSettingsModalRef.current = true;
+        const dismissDistance = isDesktop || isTablet ? 28 : 260;
+
+        settingsBackdropOpacity.value = withTiming(0, {
+            duration: 180,
+            easing: Easing.out(Easing.quad),
+        });
+        settingsSheetTranslateY.value = withTiming(
+            dismissDistance,
+            { duration: 220, easing: Easing.out(Easing.cubic) },
+        );
+        settingsSheetScale.value = withTiming(
+            isDesktop || isTablet ? 0.98 : 1,
+            { duration: 220, easing: Easing.out(Easing.cubic) },
+            (finished) => {
+                if (finished) {
+                    runOnJS(hideSettingsModalAfterAnimation)();
+                }
+            },
+        );
+    }, [
+        hideSettingsModalAfterAnimation,
+        isDesktop,
+        isTablet,
+        settingsBackdropOpacity,
+        settingsModalVisible,
+        settingsSheetScale,
+        settingsSheetTranslateY,
+    ]);
+
+    useEffect(() => {
+        if (activeSettingsModal === null) {
+            return;
+        }
+
+        setSettingsModalVisible(true);
+        isClosingSettingsModalRef.current = false;
+
+        cancelAnimation(settingsBackdropOpacity);
+        cancelAnimation(settingsSheetTranslateY);
+        cancelAnimation(settingsSheetScale);
+
+        settingsBackdropOpacity.value = 0;
+        settingsSheetTranslateY.value = isDesktop || isTablet ? 28 : 300;
+        settingsSheetScale.value = isDesktop || isTablet ? 0.96 : 1;
+
+        settingsBackdropOpacity.value = withTiming(1, {
+            duration: 220,
+            easing: Easing.out(Easing.quad),
+        });
+        settingsSheetTranslateY.value = withSpring(0, {
+            damping: 20,
+            stiffness: 220,
+        });
+        if (isDesktop || isTablet) {
+            settingsSheetScale.value = withSpring(1, {
+                damping: 20,
+                stiffness: 220,
+            });
+        }
+    }, [
+        activeSettingsModal,
+        isDesktop,
+        isTablet,
+        settingsBackdropOpacity,
+        settingsSheetScale,
+        settingsSheetTranslateY,
+    ]);
+
+    const settingsBackdropAnimatedStyle = useAnimatedStyle(() => ({
+        opacity: settingsBackdropOpacity.value,
+    }));
+
+    const settingsSheetAnimatedStyle = useAnimatedStyle(() => ({
+        transform: [
+            { translateY: settingsSheetTranslateY.value },
+            { scale: settingsSheetScale.value },
+        ],
+    }));
+
+    const settingsDragPanResponder = useMemo(
+        () =>
+            PanResponder.create({
+                onMoveShouldSetPanResponder: (_, gestureState) => {
+                    if (isDesktop || isTablet || !settingsModalVisible) {
+                        return false;
+                    }
+                    return (
+                        gestureState.dy > 6 &&
+                        Math.abs(gestureState.dy) > Math.abs(gestureState.dx)
+                    );
+                },
+                onPanResponderMove: (_, gestureState) => {
+                    if (isDesktop || isTablet) {
+                        return;
+                    }
+                    const nextY = Math.max(0, gestureState.dy);
+                    settingsSheetTranslateY.value = nextY;
+                    settingsBackdropOpacity.value = Math.max(0.15, 1 - nextY / 320);
+                },
+                onPanResponderRelease: (_, gestureState) => {
+                    if (isDesktop || isTablet) {
+                        return;
+                    }
+                    if (gestureState.dy > 120 || gestureState.vy > 1.15) {
+                        closeSettingsModal();
+                        return;
+                    }
+                    settingsBackdropOpacity.value = withTiming(1, {
+                        duration: 180,
+                        easing: Easing.out(Easing.quad),
+                    });
+                    settingsSheetTranslateY.value = withSpring(0, {
+                        damping: 20,
+                        stiffness: 220,
+                    });
+                },
+            }),
+        [
+            closeSettingsModal,
+            isDesktop,
+            isTablet,
+            settingsBackdropOpacity,
+            settingsModalVisible,
+            settingsSheetTranslateY,
+        ],
+    );
 
     const saveProfile = () => {
         if (!editName.trim()) {
@@ -305,13 +451,27 @@ export default function ProfileScreen({ navigation }: Props) {
     const settingsSheetStyle = useMemo(
         () => [
             s.settingsSheet,
+            (isDesktop || isTablet) ? s.settingsDialog : s.settingsBottomSheet,
             {
                 alignSelf: "center" as const,
                 maxWidth: Math.min(contentMaxWidth, 760),
                 width: "100%" as const,
             },
         ],
-        [contentMaxWidth],
+        [contentMaxWidth, isDesktop, isTablet],
+    );
+
+    const settingsOverlayStyle = useMemo(
+        () => [s.settingsOverlay, (isDesktop || isTablet) && s.settingsOverlayCentered],
+        [isDesktop, isTablet],
+    );
+
+    const settingsKeyboardAvoidingStyle = useMemo(
+        () => [
+            s.settingsKeyboardAvoiding,
+            (isDesktop || isTablet) && s.settingsKeyboardAvoidingCentered,
+        ],
+        [isDesktop, isTablet],
     );
 
     // ”—€ Render helpers for settings modals ”—€
@@ -742,24 +902,35 @@ export default function ProfileScreen({ navigation }: Props) {
 
             {/* ”—€ Settings Modal ”—€ */}
             <Modal
-                visible={activeSettingsModal !== null}
+                visible={settingsModalVisible}
                 transparent
-                animationType="slide"
+                animationType="none"
                 onRequestClose={closeSettingsModal}
+                statusBarTranslucent
             >
-                <View style={s.settingsOverlay}>
-                    <Pressable style={s.settingsDismiss} onPress={closeSettingsModal} />
+                <View style={settingsOverlayStyle}>
+                    <Animated.View
+                        pointerEvents="none"
+                        style={[StyleSheet.absoluteFillObject, s.settingsBackdrop, settingsBackdropAnimatedStyle]}
+                    />
+                    <Pressable style={StyleSheet.absoluteFillObject} onPress={closeSettingsModal} />
                     <KeyboardAvoidingView
-                        style={s.settingsKeyboardAvoiding}
-                        behavior={Platform.OS === "ios" ? "padding" : "height"}
+                        style={settingsKeyboardAvoidingStyle}
+                        behavior={Platform.OS === "ios" ? "padding" : undefined}
                         keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
                     >
-                        <View style={settingsSheetStyle}>
-                            <View style={s.settingsHandle} />
+                        <Animated.View style={[settingsSheetStyle, settingsSheetAnimatedStyle]}>
+                            <View
+                                style={s.settingsHandleTouchArea}
+                                {...(!isDesktop && !isTablet ? settingsDragPanResponder.panHandlers : {})}
+                            >
+                                <View style={s.settingsHandle} />
+                            </View>
                             <ScrollView
                                 showsVerticalScrollIndicator={false}
                                 keyboardShouldPersistTaps="handled"
                                 keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
+                                contentContainerStyle={s.settingsScrollContent}
                             >
                                 {renderSettingsContent()}
                             </ScrollView>
@@ -769,7 +940,7 @@ export default function ProfileScreen({ navigation }: Props) {
                             >
                                 <Text style={s.settingsCloseBtnText}>Close</Text>
                             </Pressable>
-                        </View>
+                        </Animated.View>
                     </KeyboardAvoidingView>
                 </View>
             </Modal>
@@ -894,19 +1065,52 @@ const s = StyleSheet.create({
     modalCloseBtn: { marginTop: spacing.md, alignItems: "center" },
 
     // ”—€ Settings bottom sheet ”—€
-    settingsOverlay: { flex: 1, justifyContent: "flex-end" },
-    settingsDismiss: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)" },
-    settingsKeyboardAvoiding: { justifyContent: "flex-end" },
+    settingsOverlay: {
+        flex: 1,
+        justifyContent: "flex-end",
+    },
+    settingsBackdrop: {
+        backgroundColor: "rgba(0,0,0,0.45)",
+    },
+    settingsOverlayCentered: {
+        justifyContent: "center",
+        paddingHorizontal: spacing.lg,
+        paddingVertical: spacing.xl,
+    },
+    settingsKeyboardAvoiding: {
+        width: "100%",
+        justifyContent: "flex-end",
+    },
+    settingsKeyboardAvoidingCentered: {
+        justifyContent: "center",
+    },
     settingsSheet: {
         backgroundColor: colors.bgSurface,
-        borderTopLeftRadius: 28, borderTopRightRadius: 28,
         padding: spacing.lg, paddingTop: spacing.md,
-        maxHeight: "80%",
+        maxHeight: "88%",
         ...shadow.card,
+    },
+    settingsBottomSheet: {
+        borderTopLeftRadius: 28,
+        borderTopRightRadius: 28,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+    },
+    settingsDialog: {
+        borderRadius: 28,
     },
     settingsHandle: {
         width: 40, height: 5, borderRadius: 3,
-        backgroundColor: colors.bgSoft, alignSelf: "center", marginBottom: spacing.md,
+        backgroundColor: colors.bgSoft, alignSelf: "center",
+    },
+    settingsHandleTouchArea: {
+        alignItems: "center",
+        paddingTop: spacing.xs,
+        paddingBottom: spacing.sm,
+        marginBottom: spacing.xs,
+    },
+    settingsScrollContent: {
+        paddingBottom: spacing.sm,
     },
     settingsTitle: { fontSize: 22, fontWeight: "900", color: colors.textPrimary, marginBottom: spacing.lg },
     settingsCloseBtn: {
