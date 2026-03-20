@@ -191,15 +191,15 @@ export default function ProfileScreen({ navigation }: Props) {
         settingsSheetTranslateY.value = withTiming(
             dismissDistance,
             { duration: 220, easing: Easing.out(Easing.cubic) },
-        );
-        settingsSheetScale.value = withTiming(
-            isDesktop || isTablet ? 0.98 : 1,
-            { duration: 220, easing: Easing.out(Easing.cubic) },
             (finished) => {
                 if (finished) {
                     runOnJS(hideSettingsModalAfterAnimation)();
                 }
             },
+        );
+        settingsSheetScale.value = withTiming(
+            isDesktop || isTablet ? 0.98 : 1,
+            { duration: 220, easing: Easing.out(Easing.cubic) },
         );
     }, [
         hideSettingsModalAfterAnimation,
