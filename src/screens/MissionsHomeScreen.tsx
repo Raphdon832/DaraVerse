@@ -71,6 +71,7 @@ export default function MissionsHomeScreen({ navigation }: Props) {
         alignSelf: "center" as const,
         maxWidth: contentMaxWidth,
         paddingHorizontal: horizontalPadding,
+        width: "100%" as const,
       },
     ],
     [contentMaxWidth, horizontalPadding],
@@ -117,7 +118,8 @@ export default function MissionsHomeScreen({ navigation }: Props) {
             <ImageBackground
               source={require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest landscape splash.png")}
               style={styles.cardImgPlaceholder}
-              imageStyle={{ borderRadius: 30 }}
+              imageStyle={styles.cardImgBackground}
+              resizeMode="cover"
             >
               <View style={styles.interactiveBadge}>
                 <Ionicons name={missionTypeIcon as any} size={12} color="#fff" />
@@ -301,6 +303,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     gap: spacing.lg,
+    width: "100%",
   },
   desktopSidebar: {
     width: 280,
@@ -352,10 +355,10 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     ...shadow.card,
     position: "relative",
+    overflow: "hidden",
   },
   desktopCard: {
-    maxWidth: 840,
-    alignSelf: "center",
+    alignSelf: "stretch",
     width: "100%",
   },
   cardImgPlaceholder: {
@@ -367,6 +370,10 @@ const styles = StyleSheet.create({
     margin: 8,
     alignItems: "center",
     justifyContent: "center",
+    overflow: "hidden",
+  },
+  cardImgBackground: {
+    borderRadius: 30,
   },
   cardTextRow: {
     paddingHorizontal: spacing.xl,
