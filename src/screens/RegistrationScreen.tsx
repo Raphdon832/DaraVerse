@@ -32,6 +32,7 @@ export default function RegistrationScreen({ navigation }: Props) {
   const [firstName, setFirstName] = useState("");
   const [ageInput, setAgeInput] = useState("");
   const [selectedAvatarId, setSelectedAvatarId] = useState<string | null>(null);
+  const [showAllAvatars, setShowAllAvatars] = useState(false);
   const { registerLearner } = useAppState();
   const { isAuthenticated } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,6 +41,10 @@ export default function RegistrationScreen({ navigation }: Props) {
   const selectedAvatar = useMemo(
     () => avatarOptions.find((avatar) => avatar.id === selectedAvatarId),
     [selectedAvatarId]
+  );
+  const visibleAvatarOptions = useMemo(
+    () => (showAllAvatars ? avatarOptions : avatarOptions.slice(0, 8)),
+    [showAllAvatars]
   );
 
   const parsedAge = Number.parseInt(ageInput, 10);
@@ -149,19 +154,18 @@ export default function RegistrationScreen({ navigation }: Props) {
 
           <Text style={styles.label}>CHOOSE AN AVATAR</Text>
           <View style={styles.avatarGrid}>
-            {avatarOptions.map((avatar) => {
+            {visibleAvatarOptions.map((avatar) => {
               const selected = selectedAvatarId === avatar.id;
               return (
                 <MotiPressable
                   key={avatar.id}
                   onPress={() => setSelectedAvatarId(avatar.id)}
-                  animate={useMemo(() => ({ pressed }: { pressed: boolean }) => {
+                  animate={({ pressed }: { pressed: boolean }) => {
                     "worklet";
                     return {
                       scale: pressed ? 0.9 : 1,
-                      borderColor: selected ? colors.ctaPrimary : "transparent",
                     };
-                  }, [selected])}
+                  }}
                   style={[
                     styles.avatarTile,
                     selected && styles.avatarTileSelected,
@@ -172,6 +176,15 @@ export default function RegistrationScreen({ navigation }: Props) {
               );
             })}
           </View>
+          {!showAllAvatars && avatarOptions.length > visibleAvatarOptions.length ? (
+            <MotiPressable
+              onPress={() => setShowAllAvatars(true)}
+              animate={pressScale}
+              style={styles.loadMoreAvatarsButton}
+            >
+              <Text style={styles.loadMoreAvatarsButtonText}>Show all avatars</Text>
+            </MotiPressable>
+          ) : null}
         </MotiView>
 
         <MotiView
@@ -340,6 +353,19 @@ const styles = StyleSheet.create({
   avatarTileSelected: {
     borderColor: colors.ctaPrimary,
     backgroundColor: colors.pastelPeach,
+  },
+  loadMoreAvatarsButton: {
+    marginTop: spacing.sm,
+    alignSelf: "flex-start",
+    backgroundColor: colors.bgSoft,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  loadMoreAvatarsButtonText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.textSecondary,
   },
   avatarThumb: {
     width: 48,

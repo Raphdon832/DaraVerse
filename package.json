@@ -7,6 +7,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
+    "optimize:web-images": "node scripts/optimize-web-images.mjs",
     "export:web": "expo export --platform web",
     "build:web:pwa": "expo export --platform web && node scripts/postprocess-web-pwa.mjs",
     "set:user-role": "node scripts/set-user-role.mjs"
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@types/react": "~19.1.10",
     "firebase-admin": "^13.7.0",
+    "sharp": "^0.34.5",
     "typescript": "~5.9.2"
   },
   "private": true

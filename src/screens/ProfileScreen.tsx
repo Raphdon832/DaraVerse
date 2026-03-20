@@ -62,6 +62,7 @@ export default function ProfileScreen({ navigation }: Props) {
     const { stemCategories: stemCategoryCatalog, missions: missionCatalog } = state.catalogs;
     const { user } = useAuth();
     const selectedAvatar = getAvatarById(state.learner.avatarId) ?? avatarOptions[0];
+    const selectedAvatarDisplaySource = selectedAvatar.full;
     const ageLabel = getAgeBracketLabel(state.learner.ageBracket ?? defaultAgeBracket);
     const userIsAnonymous = isAnonymous();
 
@@ -577,7 +578,7 @@ export default function ProfileScreen({ navigation }: Props) {
                     style={s.heroCard}
                 >
                     <Pressable onPress={openAvatarModal} style={s.avatarRing}>
-                        <Image source={selectedAvatar.full} style={s.heroAvatar} resizeMode="contain" />
+                        <Image source={selectedAvatarDisplaySource} style={s.heroAvatar} resizeMode="contain" />
                     </Pressable>
                     <Text style={s.avatarTapHint}>Tap to view</Text>
                     <Text style={s.heroName}>{state.learner.firstName || "Learner"}</Text>
@@ -725,7 +726,7 @@ export default function ProfileScreen({ navigation }: Props) {
                     <Pressable style={StyleSheet.absoluteFill} />
                     <Animated.View style={[s.modalContent, modalContentStyle]}>
                         <Animated.View style={[s.modalAvatarWrap, spinStyle]}>
-                            <Image source={selectedAvatar.full} style={s.modalAvatar} resizeMode="contain" />
+                            <Image source={selectedAvatarDisplaySource} style={s.modalAvatar} resizeMode="contain" />
                         </Animated.View>
                         <Text style={s.modalName}>{state.learner.firstName || "Learner"}</Text>
                         <Text style={s.modalSubtitle}>Ages {ageLabel}</Text>
