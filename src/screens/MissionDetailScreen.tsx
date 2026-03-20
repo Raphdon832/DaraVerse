@@ -18,8 +18,8 @@ import type { MissionsStackParamList } from "../types/navigation";
 
 type Props = NativeStackScreenProps<MissionsStackParamList, "MissionDetail">;
 
-const CYBERQUEST_CTA_BG = require("../../public/UI_Assets/New Assets/Dara and the CyberQuest landscape splash.png");
-const ARE_YOU_READY_AUDIO = require("../../public/Sounds/Dara and the CyberQuest Audio Assets/AreYouReady.mp3");
+const CYBERQUEST_CTA_BG = require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest landscape splash.png");
+const ARE_YOU_READY_AUDIO = require("../../assets/Sounds/Dara and the CyberQuest Audio Assets/AreYouReady.mp3");
 
 const pressScale = ({ pressed }: { pressed: boolean }) => {
   "worklet";

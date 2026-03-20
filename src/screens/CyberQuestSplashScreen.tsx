@@ -22,11 +22,11 @@ const { width: SCREEN_W } = Dimensions.get("window");
 
 // Keep splash responsive while minimizing heavy startup preload on web.
 const CRITICAL_PRELOAD_ASSETS = [
-  require("../../public/UI_Assets/New Assets/Dara and the CyberQuest Splashscreen.png"),
-  require("../../public/UI_Assets/New Assets/Dara Folding Arms.png"),
-  require("../../public/UI_Assets/New Assets/Dara and the CyberQuest landscape splash 2.png"),
-  require("../../public/UI_Assets/New Assets/Computer Lab.png"),
-  require("../../public/UI_Assets/CodeWorldSchool.png"),
+  require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest Splashscreen.png"),
+  require("../../assets/UI_Assets/New Assets/Dara Folding Arms.png"),
+  require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest landscape splash 2.png"),
+  require("../../assets/UI_Assets/New Assets/Computer Lab.png"),
+  require("../../assets/UI_Assets/CodeWorldSchool.png"),
 ];
 
 const LOADING_TIPS = [
@@ -120,7 +120,7 @@ export default function CyberQuestSplashScreen({ navigation, route }: Props) {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../../public/UI_Assets/New Assets/Dara and the CyberQuest Splashscreen.png")}
+        source={require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest Splashscreen.png")}
         style={styles.background}
         imageStyle={styles.backgroundImage}
       >
@@ -176,7 +176,7 @@ export default function CyberQuestSplashScreen({ navigation, route }: Props) {
             pointerEvents="none"
           >
             <Image
-              source={require("../../public/UI_Assets/New Assets/Dara Folding Arms.png")}
+              source={require("../../assets/UI_Assets/New Assets/Dara Folding Arms.png")}
               resizeMode="contain"
               style={styles.character}
             />

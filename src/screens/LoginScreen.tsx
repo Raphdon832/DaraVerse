@@ -111,7 +111,7 @@ export default function LoginScreen({ navigation }: Props) {
                         transition={{ type: "timing", duration: 600 }}
                     >
                         <Image
-                            source={require("../../public/Daraverse Logo New Main.png")}
+                            source={require("../../assets/Daraverse Logo New Main.png")}
                             style={styles.logoSmall}
                             resizeMode="contain"
                         />

@@ -528,7 +528,7 @@ export default function ProfileScreen({ navigation }: Props) {
                         <Text style={s.settingsTitle}>About Daraverse</Text>
                         <View style={s.aboutLogoWrap}>
                             <Image
-                                source={require("../../public/Daraverse Logo New Main.png")}
+                                source={require("../../assets/Daraverse Logo New Main.png")}
                                 style={{ width: 80, height: 80 }}
                                 resizeMode="contain"
                             />

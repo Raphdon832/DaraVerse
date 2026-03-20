@@ -52,7 +52,7 @@
 - [x] Baseline audit and hotspot identification.
 - [x] Phase 1 code updates completed (registration avatar deferral, splash preload trim, cache headers).
 - [x] Phase 2 asset conversion pipeline started with automated PNG optimization script.
-- [ ] Phase 3 structural optimization.
+- [x] Phase 3 structural optimization in progress (runtime assets migrated from `public` to `assets`, CI asset budgets enforced).
 
 ## Latest Result Snapshot
 
@@ -61,3 +61,9 @@
 - `public/UI_Assets/New Assets`: `59.96 MB` -> `12.81 MB`.
 - `assets/badges`: `6.15 MB` -> `1.94 MB`.
 - Optimizer pass scanned 70 PNG files and saved about `71.75 MB`.
+- Runtime app media moved out of `public/`, removing duplicate raw copy in web export.
+- Current CI build metrics:
+  - Dist total: `57.91 MB`
+  - PNG total: `44.32 MB`
+  - JS total: `4.06 MB`
+  - Largest PNG: `1.84 MB`

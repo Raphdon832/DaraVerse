@@ -41,10 +41,10 @@ const STORY_SUMMARIES: Record<string, StorySummary> = {
       "With the system secured and Amina's project recovered, the Showcase could go ahead. But as Dara celebrated, a new notification appeared from the Mentor Network… and deep in the system logs, ShadowAdmin's status still read: ACTIVE.",
     ],
     paragraphAudio: [
-      require("../../public/Sounds/Dara and the CyberQuest Audio Assets/DaC_1st.mp3"),
-      require("../../public/Sounds/Dara and the CyberQuest Audio Assets/DaC_2nd.mp3"),
-      require("../../public/Sounds/Dara and the CyberQuest Audio Assets/DaC_3rd.mp3"),
-      require("../../public/Sounds/Dara and the CyberQuest Audio Assets/DaC_4th.mp3"),
+      require("../../assets/Sounds/Dara and the CyberQuest Audio Assets/DaC_1st.mp3"),
+      require("../../assets/Sounds/Dara and the CyberQuest Audio Assets/DaC_2nd.mp3"),
+      require("../../assets/Sounds/Dara and the CyberQuest Audio Assets/DaC_3rd.mp3"),
+      require("../../assets/Sounds/Dara and the CyberQuest Audio Assets/DaC_4th.mp3"),
     ],
   },
   "cyberquest-m2": {
@@ -216,7 +216,7 @@ export default function MissionPlayerScreen({ navigation, route }: Props) {
         >
           {isCyberQuest ? (
             <Image
-              source={require("../../public/UI_Assets/New Assets/Dara and the CyberQuest landscape splash 2.png")}
+              source={require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest landscape splash 2.png")}
               style={{ width: "100%", height: "100%", borderRadius: 30 }}
               resizeMode="cover"
             />

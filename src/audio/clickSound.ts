@@ -1,7 +1,7 @@
 import { Audio } from "expo-av";
 import { isGlobalSoundEnabled } from "./audioPreferences";
 
-const CLICK_SOUND_ASSET = require("../../public/Sounds/click.mp3");
+const CLICK_SOUND_ASSET = require("../../assets/Sounds/click.mp3");
 
 let clickSound: Audio.Sound | null = null;
 let loadPromise: Promise<void> | null = null;

@@ -6,7 +6,7 @@ const ROOT = process.cwd();
 
 const TARGET_CONFIGS = [
   {
-    dir: "public/AvatarThumbnails",
+    dir: "assets/AvatarThumbnails",
     maxWidth: 256,
     maxHeight: 256,
     pngOptions: { compressionLevel: 9, palette: true, quality: 78, effort: 10 },
@@ -18,13 +18,13 @@ const TARGET_CONFIGS = [
     pngOptions: { compressionLevel: 9, palette: true, quality: 82, effort: 10 },
   },
   {
-    dir: "public/UI_Assets/New Assets",
+    dir: "assets/UI_Assets/New Assets",
     maxWidth: 1600,
     maxHeight: 1600,
     pngOptions: { compressionLevel: 9, adaptiveFiltering: true, effort: 10 },
   },
   {
-    dir: "public/UI_Assets",
+    dir: "assets/UI_Assets",
     maxWidth: 1600,
     maxHeight: 1600,
     pngOptions: { compressionLevel: 9, adaptiveFiltering: true, effort: 10 },

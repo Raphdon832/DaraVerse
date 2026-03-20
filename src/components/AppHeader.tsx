@@ -77,7 +77,7 @@ export default function AppHeader({
             <View style={styles.titleRow}>
               {showLogo && (
                 <Image
-                  source={require("../../public/Daraverse Logo New Main.png")}
+                  source={require("../../assets/Daraverse Logo New Main.png")}
                   style={styles.logoMini}
                   resizeMode="contain"
                 />

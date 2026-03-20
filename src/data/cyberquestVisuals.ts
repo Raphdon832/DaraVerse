@@ -14,36 +14,36 @@ export type CyberQuestSceneVisual = {
    ================================================================ */
 const ASSETS = {
   /* Backgrounds */
-  computerLab: require("../../public/UI_Assets/New Assets/Computer Lab.png") as MissionImage,
-  computerLabDark: require("../../public/UI_Assets/New Assets/Computer lab Dark.png") as MissionImage,
-  school: require("../../public/UI_Assets/CodeWorldSchool.png") as MissionImage,
-  scienceHallway: require("../../public/UI_Assets/Science Hallway.png") as MissionImage,
+  computerLab: require("../../assets/UI_Assets/New Assets/Computer Lab.png") as MissionImage,
+  computerLabDark: require("../../assets/UI_Assets/New Assets/Computer lab Dark.png") as MissionImage,
+  school: require("../../assets/UI_Assets/CodeWorldSchool.png") as MissionImage,
+  scienceHallway: require("../../assets/UI_Assets/Science Hallway.png") as MissionImage,
 
   /* Dara poses */
-  daraFoldingArms: require("../../public/UI_Assets/New Assets/Dara Folding Arms.png") as MissionImage,
-  daraOhWell: require("../../public/UI_Assets/New Assets/Dara Oh Well.png") as MissionImage,
-  daraSurprised: require("../../public/UI_Assets/New Assets/Dara Surprised.png") as MissionImage,
-  daraThinking: require("../../public/UI_Assets/New Assets/Dara Thinking.png") as MissionImage,
-  daraThumbsUp: require("../../public/UI_Assets/New Assets/Dara Thumbs Up.png") as MissionImage,
-  daraWorried: require("../../public/UI_Assets/New Assets/Dara Worried.png") as MissionImage,
+  daraFoldingArms: require("../../assets/UI_Assets/New Assets/Dara Folding Arms.png") as MissionImage,
+  daraOhWell: require("../../assets/UI_Assets/New Assets/Dara Oh Well.png") as MissionImage,
+  daraSurprised: require("../../assets/UI_Assets/New Assets/Dara Surprised.png") as MissionImage,
+  daraThinking: require("../../assets/UI_Assets/New Assets/Dara Thinking.png") as MissionImage,
+  daraThumbsUp: require("../../assets/UI_Assets/New Assets/Dara Thumbs Up.png") as MissionImage,
+  daraWorried: require("../../assets/UI_Assets/New Assets/Dara Worried.png") as MissionImage,
 
   /* Amina poses */
-  aminaFoldingArms: require("../../public/UI_Assets/New Assets/Amina Folding Arms.png") as MissionImage,
-  aminaHandsOnWaist: require("../../public/UI_Assets/New Assets/Amina Hands On Waist.png") as MissionImage,
-  aminaOhWell: require("../../public/UI_Assets/New Assets/Amina Oh Well.png") as MissionImage,
-  aminaSurprised: require("../../public/UI_Assets/New Assets/Amina Surprised.png") as MissionImage,
-  aminaThinking: require("../../public/UI_Assets/New Assets/Amina Thinking.png") as MissionImage,
-  aminaThumbsUp: require("../../public/UI_Assets/New Assets/Amina Thumbs Up.png") as MissionImage,
-  aminaWorried: require("../../public/UI_Assets/New Assets/Amina Worried.png") as MissionImage,
+  aminaFoldingArms: require("../../assets/UI_Assets/New Assets/Amina Folding Arms.png") as MissionImage,
+  aminaHandsOnWaist: require("../../assets/UI_Assets/New Assets/Amina Hands On Waist.png") as MissionImage,
+  aminaOhWell: require("../../assets/UI_Assets/New Assets/Amina Oh Well.png") as MissionImage,
+  aminaSurprised: require("../../assets/UI_Assets/New Assets/Amina Surprised.png") as MissionImage,
+  aminaThinking: require("../../assets/UI_Assets/New Assets/Amina Thinking.png") as MissionImage,
+  aminaThumbsUp: require("../../assets/UI_Assets/New Assets/Amina Thumbs Up.png") as MissionImage,
+  aminaWorried: require("../../assets/UI_Assets/New Assets/Amina Worried.png") as MissionImage,
 
   /* Mr Okafor (teacher) poses */
-  okaforHmmm: require("../../public/UI_Assets/New Assets/Mr Okafor Hmmm_You Sure.png") as MissionImage,
-  okaforOhWell: require("../../public/UI_Assets/New Assets/Mr Okafor Oh Well.png") as MissionImage,
-  okaforOkay: require("../../public/UI_Assets/New Assets/Mr Okafor Okay.png") as MissionImage,
-  okaforSurprised: require("../../public/UI_Assets/New Assets/Mr Okafor Surprised_You Seeee.png") as MissionImage,
-  okaforThinking: require("../../public/UI_Assets/New Assets/Mr Okafor Thinking.png") as MissionImage,
-  okaforWorried: require("../../public/UI_Assets/New Assets/Mr Okafor Worried.png") as MissionImage,
-  okaforYouThink: require("../../public/UI_Assets/New Assets/Mr Okafor You Think_.png") as MissionImage,
+  okaforHmmm: require("../../assets/UI_Assets/New Assets/Mr Okafor Hmmm_You Sure.png") as MissionImage,
+  okaforOhWell: require("../../assets/UI_Assets/New Assets/Mr Okafor Oh Well.png") as MissionImage,
+  okaforOkay: require("../../assets/UI_Assets/New Assets/Mr Okafor Okay.png") as MissionImage,
+  okaforSurprised: require("../../assets/UI_Assets/New Assets/Mr Okafor Surprised_You Seeee.png") as MissionImage,
+  okaforThinking: require("../../assets/UI_Assets/New Assets/Mr Okafor Thinking.png") as MissionImage,
+  okaforWorried: require("../../assets/UI_Assets/New Assets/Mr Okafor Worried.png") as MissionImage,
+  okaforYouThink: require("../../assets/UI_Assets/New Assets/Mr Okafor You Think_.png") as MissionImage,
 };
 
 const DEFAULT_VISUAL: CyberQuestSceneVisual = {

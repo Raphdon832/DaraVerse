@@ -10,6 +10,9 @@
     "optimize:web-images": "node scripts/optimize-web-images.mjs",
     "export:web": "expo export --platform web",
     "build:web:pwa": "expo export --platform web && node scripts/postprocess-web-pwa.mjs",
+    "report:web-assets": "node scripts/report-web-assets.mjs",
+    "check:web-assets": "node scripts/check-web-assets.mjs",
+    "build:web:ci": "npm run build:web:pwa && npm run check:web-assets",
     "set:user-role": "node scripts/set-user-role.mjs"
   },
   "dependencies": {

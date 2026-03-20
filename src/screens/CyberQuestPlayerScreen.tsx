@@ -61,7 +61,7 @@ const SCENE_TINTS: Record<string, string> = {
     tension: "#FFF5F0",
     secure: "#F0FFFC",
 };
-const GAMEPLAY_AUDIO = require("../../public/Sounds/Dara and the CyberQuest Audio Assets/Dara_MainGameplay.mp3");
+const GAMEPLAY_AUDIO = require("../../assets/Sounds/Dara and the CyberQuest Audio Assets/Dara_MainGameplay.mp3");
 
 /* ================================================================
    Main Screen

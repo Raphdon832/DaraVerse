@@ -115,7 +115,7 @@ export default function MissionsHomeScreen({ navigation }: Props) {
         >
           {isCyberQuest ? (
             <ImageBackground
-              source={require("../../public/UI_Assets/New Assets/Dara and the CyberQuest landscape splash.png")}
+              source={require("../../assets/UI_Assets/New Assets/Dara and the CyberQuest landscape splash.png")}
               style={styles.cardImgPlaceholder}
               imageStyle={{ borderRadius: 30 }}
             >

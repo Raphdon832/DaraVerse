@@ -104,7 +104,7 @@ export default function SignUpScreen({ navigation }: Props) {
                         animate={{ opacity: 1, translateY: 0 }}
                     >
                         <Image
-                            source={require("../../public/Daraverse Logo New Main.png")}
+                            source={require("../../assets/Daraverse Logo New Main.png")}
                             style={styles.logoSmall}
                             resizeMode="contain"
                         />

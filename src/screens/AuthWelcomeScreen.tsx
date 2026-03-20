@@ -121,7 +121,7 @@ export default function AuthWelcomeScreen({ navigation }: Props) {
                 >
                     <View style={styles.logoCircle}>
                         <Image
-                            source={require("../../public/Daraverse Logo New Main.png")}
+                            source={require("../../assets/Daraverse Logo New Main.png")}
                             style={styles.logoImage}
                             resizeMode="contain"
                         />
